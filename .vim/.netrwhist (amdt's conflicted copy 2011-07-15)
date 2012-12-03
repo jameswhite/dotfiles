@@ -1,7 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
-let g:netrw_dirhist_1='/home/Dropbox/code/KoKanban/js'
-let g:netrw_dirhist_2='/home/Dropbox/www'
-let g:netrw_dirhist_3='/home/Dropbox'
-let g:netrw_dirhist_4='/home/Dropbox/code'
-let g:netrw_dirhist_5='/home/Dropbox/code/KoKanban'
