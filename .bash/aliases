@@ -1,0 +1,74 @@
+alias apt='aptitude search'
+alias apti='sudo aptitude install'
+alias c='cat'
+alias cp='cp -i'
+alias df='df -h'
+alias dud='du -ah --max-depth=1'
+alias du='du -h'
+alias dus='du -ah --max-depth=1 | sort'
+alias :e='vim'
+alias grep='grep --color'                     # show differences in colour
+alias less='less -r'                          # raw control characters
+alias main='screen -xS main'
+alias more='less'
+alias mv='mv -i'
+alias pandora='pianobar'
+alias rebash='exec $SHELL'
+alias rm='rm -i'
+alias scl='screen -ls'
+alias scm='cd;screen -c ~/.screenrcmain'
+alias scr='screen -S `basename $PWD`'
+alias scs='screen -S'
+alias scx='screen -x'
+alias src='source ~/.bashrc'
+alias sudid='sudo -E !!'
+alias sudo='sudo -E'
+alias vista='vmplayer /home/vista/vista.iso'
+alias vi='vim'
+alias whence='type -a'                        # where, of a sort
+
+# ls
+alias dir='ls --color=auto --format=vertical'
+alias la='ls -A'                              # all but . and ..
+alias lla='ls -alh'                              # long list
+alias ll='ls -l'                              # long list
+alias l='ls -CF'                              #
+alias llt='ls -lt'
+alias ls='ls -hF --color=tty'                 # classify files in colour
+alias lt='ls -t'
+alias vdir='ls --color=auto --format=long'
+
+# dev
+source $DROPBOX/home/.bash/aliasesdev
+
+# wireless/power
+alias iwhome='sudo iwconfig eth1 essid biku key 4A809485F6E2CB3C04680B426A;sudo dhclient eth1'
+alias standby='sudo /etc/acpi/sleep.sh'
+
+# misc
+alias leanfolio='ssh -oServerAliveInterval=60 arafatm@173.230.130.188'
+alias proxy='ssh -oServerAliveInterval=60 -D 1234 arafatm@leanfolio.com'
+alias proxyh='ssh -oServerAliveInterval=60 -D 1234 xbmc@192.168.1.5'
+alias home='ssh -oServerAliveInterval=60 arafatm@192.168.1.5'
+alias xbmc='ssh -oServerAliveInterval=60 xbmc@192.168.1.5'
+alias dynds='ssh -oServerAliveInterval=60 arafatm@arafatm.dyndns.org'
+alias firedev='firefox -P dev -no-remote'
+alias firemisc='firefox -P misc -no-remote'
+
+# todo
+alias t='todo.sh -d ~/.todo'
+alias tdpr='todo.sh -d ~/.todo pri'
+alias tdl='todo.sh -d ~/.todo ls'
+alias tdp='todo.sh -d ~/.todo view project'
+alias tdc='todo.sh -d ~/.todo view context'
+alias tvi='vi ~/todo/todo.txt'
+
+duds(){
+  du -hs *|sort -hr
+}
+
+function secure_chromium {
+  port=1234
+  chromium --proxy-server="socks://localhost:$port" &
+  exit
+}

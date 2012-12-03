@@ -1,0 +1,43 @@
+export DISPLAY=:0.0
+export EDITOR=vi
+set -o vi
+set -o notify    # Don't wait for job termination notification
+set -o ignoreeof # Don't use ^D to exit
+shopt -s nocaseglob # Use case-insensitive filename globbing
+shopt -s histappend # Make bash append rather than overwrite the history on disk
+shopt -s cdspell # When changing directory small typos can be ignored by bash
+umask 0077
+
+export HISTCONTROL="ignoredups" # Don't put duplicate lines in the history.
+export HISTIGNORE="[   ]*:&:bg:fg:exit" # Ignore some controlling instructions
+export PROMPT_COMMAND="history -a" # Whenever displaying the prompt, write the previous line to disk
+
+export HOSTFILE=$HOME/.hosts
+
+export PATH=~/bin:/usr/local/bin:/var/lib/gems/1.9.1/bin:/opt/vagrant/bin:$PATH
+#eval "$(rbenv init -)"
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+  xterm*|rxvt*)
+  PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"'
+  ;;
+  *)
+  ;;
+esac
+
+# PROMPT
+########
+
+PS1='\[\033[01;32m\]\h:\w \$\[\033[00m\] '
+
+# enable programmable completion features 
+if [ -f /etc/bash_completion ]; then
+  . /etc/bash_completion
+fi
+source ~/.bash_completion.d/todo_completer.sh
+complete -F _todo_sh -o default t
+export TODO_DIR='/home/arafatm/todo'
+
+export SHELL='/bin/bash'
+eval `dircolors $HOME/.dir_colors`
