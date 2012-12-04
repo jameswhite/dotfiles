@@ -1,3 +1,0 @@
-alias pacu='sudo pacman-color -Syyu'
-alias paci='sudo pacman-color -S'
-alias pacs='pacman-color -Ss'

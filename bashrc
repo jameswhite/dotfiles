@@ -1,11 +1,12 @@
 export DOTFILES=$HOME/.dotfiles
 
-source $DOTFILES/bash/shellopts
-source $DOTFILES/bash/aliases
+source $DROPBOX/home/.bash/shellopts
+source $DROPBOX/home/.bash/aliases
 
 
 if [[ `uname` =~ "linux" ]] # All linux systems
 then
+  source $DROPBOX/home/.bash/linux
   export TERM=xterm
 fi
 
