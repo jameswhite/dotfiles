@@ -1,0 +1,10 @@
+#!/bin/bash
+
+DOTFILES=$HOME/dotfiles
+
+for f in `ls -A $DOTFILES`; do
+  ln -sf $DOTFILES/$f $HOME/ 
+  rm -f $HOME/.git*
+done
+
+#ls -Al $HOME/links/
