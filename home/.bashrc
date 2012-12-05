@@ -1,7 +1,8 @@
 export DOTFILES=$HOME/.dotfiles
 
-source $DOTFILES/bash/shellopts
-source $DOTFILES/bash/aliases
+source ~/.bash/shellopts
+source ~/.bash/aliases
+source ~/.bash/aliasesdev
 
 
 if [[ `uname` =~ "linux" ]] # All linux systems

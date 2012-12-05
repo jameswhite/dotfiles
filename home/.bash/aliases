@@ -38,9 +38,6 @@ alias ls='ls -hF --color=tty'                 # classify files in colour
 alias lt='ls -t'
 alias vdir='ls --color=auto --format=long'
 
-# dev
-source $DROPBOX/home/.bash/aliasesdev
-
 # wireless/power
 alias iwhome='sudo iwconfig eth1 essid biku key 4A809485F6E2CB3C04680B426A;sudo dhclient eth1'
 alias standby='sudo /etc/acpi/sleep.sh'
