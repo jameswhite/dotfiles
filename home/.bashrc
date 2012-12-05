@@ -8,8 +8,6 @@ source ~/.bash/aliasesdev
 if [[ `uname` =~ "linux" ]] # All linux systems
 then
   export TERM=xterm
-  keychain --clear id_rsa
-  source $HOME/.keychain/$HOSTNAME-sh
 fi
 
 if [[ `uname -a` =~ "prime" ]] 
