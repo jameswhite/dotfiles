@@ -14,8 +14,9 @@ export PROMPT_COMMAND="history -a" # Whenever displaying the prompt, write the p
 
 export HOSTFILE=$HOME/.hosts
 
-export PATH=~/bin:/usr/local/bin:/var/lib/gems/1.9.1/bin:/opt/vagrant/bin:$PATH
-#eval "$(rbenv init -)"
+export GEM_HOME=$HOME/.gem
+export PATH=$HOME/bin:$HOME/.gem/bin:/usr/local/bin:/usr/bin:/bin
+
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
