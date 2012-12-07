@@ -6,8 +6,6 @@ fi
 
 source $HOME/.bashrc
 
-eval "$(rbenv init -)"
-
 if [[ $- =~ i ]]
 then
   screen -x main
