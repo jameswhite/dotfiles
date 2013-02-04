@@ -15,12 +15,12 @@ export PROMPT_COMMAND="history -a" # Whenever displaying the prompt, write the p
 export HOSTFILE=$HOME/.hosts
 
 # Ruby with rbenv
-export RBENV_HOME=$HOME/.rbenv
+#export RBENV_HOME=$HOME/.rbenv
 #export GEM_HOME=$HOME/.gem
 
 export PATH=$HOME/bin:$RBENV_HOME/bin/:/usr/local/bin:/usr/bin:/bin
 
-eval "$(rbenv init -)"
+#eval "$(rbenv init -)"
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
