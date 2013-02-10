@@ -20,6 +20,7 @@ export PATH=$HOME/bin:/usr/local/bin:/usr/bin:/bin
 
 # RUBY
 alias bundle-bootstrap="bundle install --binstubs=.bundle/bin --path=.bundle/gems"
+alias b='bundle exec'
 export GEM_HOME=$HOME/.gems
 export PATH=.bundle/bin:$GEM_HOME/bin:$PATH
 
