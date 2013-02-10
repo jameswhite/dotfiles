@@ -71,6 +71,7 @@ nnoremap  <silent>  <space> :exe 'silent! normal! za'.(foldlevel('.')?'':'l')<cr
 " ****************************
 " Abbreviations
 iab  ,d  <c-r>=strftime("%Y-%m-%d")<cr>
+iab  ,-  ------------------------------------------------------------
 
 colorscheme koehler
 

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export DISPLAY=:0.0
 export EDITOR=vi
 set -o vi
@@ -14,13 +16,18 @@ export PROMPT_COMMAND="history -a" # Whenever displaying the prompt, write the p
 
 export HOSTFILE=$HOME/.hosts
 
+export PATH=$HOME/bin:/usr/local/bin:/usr/bin:/bin
+
+# RUBY
+alias bundle-bootstrap="bundle install --binstubs=.bundle/bin --path=.bundle/gems"
+export GEM_HOME=$HOME/.gems
+export PATH=.bundle/bin:$GEM_HOME/bin:$PATH
+
+# RBENV
 # Ruby with rbenv
-#export RBENV_HOME=$HOME/.rbenv
-#export GEM_HOME=$HOME/.gem
-
-export PATH=$HOME/bin:$RBENV_HOME/bin/:/usr/local/bin:/usr/bin:/bin
-
-#eval "$(rbenv init -)"
+# export RBENV_HOME=$HOME/.rbenv
+# export GEM_HOME=$HOME/.gem
+# eval "$(rbenv init -)"
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
