@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 git_bundles = [ 
+  "git@github.com:arafatm/todohabit.vim.git",
 	"git://github.com/vim-scripts/JavaScript-Indent.git",
   "git://github.com/xolox/vim-reload.git",
   "https://github.com/vim-scripts/draw.vim.git",
