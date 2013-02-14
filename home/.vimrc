@@ -110,14 +110,14 @@ au BufNewFile,BufRead .bashrc,.bash/* call SetFileTypeSH("bash")
 "au BufNewFile,BufRead,BufEnter *.txt  set shiftwidth=2
 "au BufNewFile,BufRead,BufEnter *.txt  set noexpandtab
 
-augroup filetypedetect
-  au BufNewFile,BufRead *.txt setfiletype markdown
-  au BufNewFile,BufRead *.txt set formatoptions=tqwan
-  au BufNewFile,BufRead,BufEnter *.txt  set smartindent
-  au BufNewFile,BufRead,BufEnter *.txt  set tabstop=2
-  au BufNewFile,BufRead,BufEnter *.txt  set shiftwidth=2
-  "au BufNewFile,BufRead,BufEnter *.txt  set expandtab
-augroup END
+"augroup filetypedetect
+"  au BufNewFile,BufRead *.txt setfiletype markdown
+"  au BufNewFile,BufRead *.txt set formatoptions=tqwan
+"  au BufNewFile,BufRead,BufEnter *.txt  set smartindent
+"  au BufNewFile,BufRead,BufEnter *.txt  set tabstop=2
+"  au BufNewFile,BufRead,BufEnter *.txt  set shiftwidth=2
+"  "au BufNewFile,BufRead,BufEnter *.txt  set expandtab
+"augroup END
 
 
 " OMNIFUNC
