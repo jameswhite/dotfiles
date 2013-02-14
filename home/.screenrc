@@ -26,6 +26,10 @@ register [ "\033:se noai\015a"
 register ] "\033:se ai\015a"
 bind ^] paste [.]
 
+attrcolor b ".I"
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+defbce "on"
+
 hardstatus alwayslastline
 #hardstatus string '%{= ky}%-Lw%{= KG}%50>%n%f* %t%{= ky}%+Lw%< %{= kG}%-=%D %d %M %Y %c:%s%{-}'
 hardstatus string "%{= ky}%-Lw%{=r}%20>%n %t%{= ky}%+Lw %{= ky}%-=| %{= kw}%c%{-} %{=r} %H "
