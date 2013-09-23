@@ -1,46 +1,24 @@
 #!/usr/bin/env ruby
 
 git_bundles = [ 
-  "git@github.com:arafatm/todohabit.vim.git",
-	"git://github.com/vim-scripts/JavaScript-Indent.git",
-  "git://github.com/xolox/vim-reload.git",
-  "https://github.com/vim-scripts/draw.vim.git",
-  #"git://github.com/vim-scripts/multvals.vim.git",
-  #"git://github.com/vim-scripts/genutils.git",
-  #"git://github.com/vim-scripts/tlib.git",
-  #"git://github.com/vim-scripts/VikiDeplate.git",
-  #"git://github.com/vim-scripts/TVO--The-Vim-Outliner.git"
-  #"git://github.com/vim-scripts/TVO--The-Vim-Outliner-with-asciidoc-supp.git"
-  #"git://github.com/vim-scripts/VOoM.git",
-  "git://github.com/vim-scripts/Markdown.git",
-  #"git://github.com/tpope/vim-markdown.git",
-	#"git://github.com/plasticboy/vim-markdown.git",
-  "git://github.com/thinca/vim-ft-markdown_fold.git",
-  #"git://github.com/astashov/vim-ruby-debugger.git",
-  #"git://github.com/msanders/snipmate.vim.git",
-  #"git://github.com/timcharper/textile.vim.git",
-  #"git://github.com/tpope/vim-cucumber.git",
-  #"git://github.com/tpope/vim-fugitive.git",
-  #"git://github.com/tpope/vim-git.git",
-  #"git://github.com/tpope/vim-haml.git",
-  #"git://github.com/tpope/vim-rails.git",
-  #"git://github.com/tpope/vim-repeat.git",
-  "git://github.com/tpope/vim-surround.git",
-  #"git://github.com/tpope/vim-vividchalk.git",
-  #"git://github.com/tsaleh/vim-align.git",
-  #"git://github.com/tsaleh/vim-shoulda.git",
-  #"git://github.com/tsaleh/vim-supertab.git",
-  #"git://github.com/tsaleh/vim-tcomment.git",
-  "git://github.com/vim-ruby/vim-ruby.git",
-	#"git://github.com/sophacles/vim-outliner.git"
-  #"https://github.com/henrik/vim-ruby-runner.git",
-  "git://github.com/scrooloose/nerdtree.git"
+  "https://github.com/airblade/vim-gitgutter.git",
+  "https://github.com/arafatm/todohabit.vim.git",
+  "https://github.com/mattn/gist-vim.git",
+  "https://github.com/msanders/snipmate.vim.git",
+  "https://github.com/scottmcginness/vim-jquery.git",
+  "https://github.com/thinca/vim-ft-markdown_fold.git",
+  "https://github.com/tpope/vim-fugitive.git",
+  "https://github.com/tpope/vim-rails.git",
+  "https://github.com/tpope/vim-bundler.git",
+  "https://github.com/vim-ruby/vim-ruby.git",
+	"https://github.com/vim-scripts/JavaScript-Indent.git",
+  "https://github.com/vim-scripts/Markdown.git",
+  "https://github.com/rodjek/vim-puppet.git"
 ]
 
 vim_org_scripts = [
-  ["IndexedSearch", "7062",   "plugin"],
-  ["gist",          "15897",  "plugin"],
-  ["jquery",        "12107",  "syntax"]
+#  ["gist",          "15897",  "plugin"],
+#  ["jquery",        "12107",  "syntax"]
 ]
 
 require 'fileutils'

@@ -110,33 +110,33 @@ au BufNewFile,BufRead .bashrc,.bash/* call SetFileTypeSH("bash")
 "au BufNewFile,BufRead,BufEnter *.txt  set shiftwidth=2
 "au BufNewFile,BufRead,BufEnter *.txt  set noexpandtab
 
-"augroup filetypedetect
-"  au BufNewFile,BufRead *.txt setfiletype markdown
-"  au BufNewFile,BufRead *.txt set formatoptions=tqwan
-"  au BufNewFile,BufRead,BufEnter *.txt  set smartindent
-"  au BufNewFile,BufRead,BufEnter *.txt  set tabstop=2
-"  au BufNewFile,BufRead,BufEnter *.txt  set shiftwidth=2
-"  "au BufNewFile,BufRead,BufEnter *.txt  set expandtab
-"augroup END
+augroup filetypedetect
+  au BufNewFile,BufRead *.txt setfiletype markdown
+  au BufNewFile,BufRead *.txt set formatoptions=tqwan
+  au BufNewFile,BufRead,BufEnter *.txt  set smartindent
+  au BufNewFile,BufRead,BufEnter *.txt  set tabstop=2
+  au BufNewFile,BufRead,BufEnter *.txt  set shiftwidth=2
+  au BufNewFile,BufRead,BufEnter *.txt  set expandtab
+augroup END
 
 
 " OMNIFUNC
 
-if has("autocmd")
-  " Ruby
-  autocmd FileType ruby set omnifunc=rubycomplete#Complete
-  autocmd FileType ruby let g:rubycomplete_buffer_loading=1
-  autocmd FileType ruby let g:rubycomplete_classes_in_global=1
-  autocmd FileType ruby set makeprg=ruby\ %
-
-  " JS
-  autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-  autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-  autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-
-  " Misc
-  autocmd FileType python set omnifunc=pythoncomplete#Complete
-  autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-  autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-  autocmd FileType c set omnifunc=ccomplete#Complete
-endif
+" if has("autocmd")
+"   " Ruby
+"   autocmd FileType ruby set omnifunc=rubycomplete#Complete
+"   autocmd FileType ruby let g:rubycomplete_buffer_loading=1
+"   autocmd FileType ruby let g:rubycomplete_classes_in_global=1
+"   autocmd FileType ruby set makeprg=ruby\ %
+" 
+"   " JS
+"   autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+"   autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+"   autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+" 
+"   " Misc
+"   autocmd FileType python set omnifunc=pythoncomplete#Complete
+"   autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+"   autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+"   autocmd FileType c set omnifunc=ccomplete#Complete
+" endif
