@@ -50,7 +50,7 @@ if [ -f /etc/bash_completion ]; then
 fi
 source ~/.bash_completion.d/todo_completer.sh
 complete -F _todo_sh -o default t
-export TODO_DIR='/home/arafatm/todo'
+export TODO_DIR='/home/$USER/todo'
 
 export SHELL='/bin/bash'
 eval `dircolors $HOME/.dir_colors`

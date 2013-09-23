@@ -1,3 +1,5 @@
+#! /usr/bin/bash
+
 alias apt='aptitude search'
 alias apti='sudo aptitude install'
 alias c='cat'
@@ -23,7 +25,6 @@ alias scx='screen -x'
 alias src='source ~/.bashrc'
 alias sudid='sudo -E !!'
 alias sudo='sudo -E'
-alias vista='vmplayer /home/vista/vista.iso'
 alias vi='vim'
 alias whence='type -a'                        # where, of a sort
 
@@ -38,17 +39,15 @@ alias ls='ls -hF --color=tty'                 # classify files in colour
 alias lt='ls -t'
 alias vdir='ls --color=auto --format=long'
 
-# wireless/power
-alias iwhome='sudo iwconfig eth1 essid biku key 4A809485F6E2CB3C04680B426A;sudo dhclient eth1'
 alias standby='sudo /etc/acpi/sleep.sh'
 
-# misc
-alias leanfolio='ssh -oServerAliveInterval=60 arafatm@173.230.130.188'
+# ssh
 alias proxy='ssh -oServerAliveInterval=60 -D 1234 arafatm@leanfolio.com'
 alias proxyh='ssh -oServerAliveInterval=60 -D 1234 xbmc@192.168.1.5'
-alias home='ssh -oServerAliveInterval=60 arafatm@192.168.1.5'
 alias xbmc='ssh -oServerAliveInterval=60 xbmc@192.168.1.5'
-alias dynds='ssh -oServerAliveInterval=60 arafatm@arafatm.dyndns.org'
+alias dynds='ssh -oServerAliveInterval=60 $USER@$USER.dyndns.org'
+
+# firefox
 alias firedev='firefox -P dev -no-remote'
 alias firemisc='firefox -P misc -no-remote'
 

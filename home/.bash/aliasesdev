@@ -1,4 +1,4 @@
-#PATH="$PATH:/opt/ruby-enterprise/bin"
+#! /usr/bin/bash
 
 alias g='git'
 alias gac='git add .; git commit -a -m'
