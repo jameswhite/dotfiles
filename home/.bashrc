@@ -9,5 +9,6 @@ pushd .
 cd $DOTFILES
 git add .
 git commit -a -m '`date`'
+git push
 popd
 }
