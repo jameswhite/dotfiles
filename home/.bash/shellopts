@@ -1,5 +1,7 @@
 #!/bin/bash
 
+xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+
 export DISPLAY=:0.0
 export EDITOR=vi
 set -o vi
