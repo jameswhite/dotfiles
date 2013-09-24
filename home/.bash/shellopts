@@ -1,6 +1,6 @@
 #!/bin/bash
 
-xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+command xmodmap >/dev/null 2>&1 || { xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'; exit 1; }
 
 export DISPLAY=:0.0
 export EDITOR=vi
