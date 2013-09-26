@@ -19,4 +19,5 @@ else
   git push
 fi
 popd
+source $HOME/.bashrc
 }

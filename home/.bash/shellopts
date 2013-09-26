@@ -27,7 +27,7 @@ alias bundle-bootstrap="bundle install --binstubs=.bundle/bin --path=.bundle/gem
 alias b='bundle exec'
 export GEM_HOME=$HOME/.gems
 
-export PATH=/usr/local/bin:/usr/bin:/bin:/sbin
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
 export PATH=$PATH:$HOME/bin # Add my scripts
 export PATH=$PATH:.bundle/bin:$GEM_HOME/bin # Add bundle and system gems
 
