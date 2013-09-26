@@ -21,7 +21,7 @@ else
   git add .
   git commit -m "$*"
   git push
-  bash setup.sh
+  bash $DOTFILES/setup.sh
 fi
 popd
 source $HOME/.bashrc
