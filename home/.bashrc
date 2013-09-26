@@ -2,7 +2,7 @@ source ~/.bash/shellopts
 source ~/.bash/aliases
 source ~/.bash/aliasesdev
 
-export DOTFILES=$HOME/.dotfiles
+export DOTFILES=$HOME/dotfiles
 
 function dotupdate() {
 pushd .
@@ -17,6 +17,7 @@ else
   git add .
   git commit -m "$*"
   git push
+  bash setup.sh
 fi
 popd
 source $HOME/.bashrc
