@@ -7,6 +7,7 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
+
 Bundle 'airblade/vim-gitgutter.git'
 Bundle 'arafatm/todohabit.vim.git'
 Bundle 'mattn/gist-vim.git'
@@ -22,6 +23,7 @@ Bundle 'vim-scripts/Markdown.git'
 Bundle 'rodjek/vim-puppet.git'
 
 filetype plugin indent on
+syntax on
 
 " ****************************
 " Common settings

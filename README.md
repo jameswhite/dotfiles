@@ -1,4 +1,4 @@
-Manage my dotfiles.
+# Manage my dotfiles.
 
 ```
 git clone git@github.com:arafatm/dotfiles.git $HOME/dotfiles
