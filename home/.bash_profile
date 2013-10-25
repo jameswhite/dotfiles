@@ -1,10 +1,4 @@
-if [[ `uname` =~ "linux" ]] 
-then
-  keychain --clear id_rsa
-  source $HOME/.keychain/$HOSTNAME-sh
-fi
+/usr/bin/keychain $HOME/.ssh/id_rsa
+source $HOME/.keychain/$HOSTNAME-sh
 
-if [[ $- =~ i ]]
-then
-  screen -x main
-fi
+screen -x main
