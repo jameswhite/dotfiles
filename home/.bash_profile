@@ -4,8 +4,6 @@ then
   source $HOME/.keychain/$HOSTNAME-sh
 fi
 
-source $HOME/.bashrc
-
 if [[ $- =~ i ]]
 then
   screen -x main
