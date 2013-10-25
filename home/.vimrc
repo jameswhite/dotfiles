@@ -1,28 +1,30 @@
-" This line should not be removed as it ensures that various options are
-" properly set to work with the Vim-related packages available in Debian.
-runtime! debian.vim
+set nocompatible               " be iMproved
+filetype off                   " required!
 
-syntax on
+" ****************************
+" Vundle package management
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
 
-set nomodeline
-let g:secure_modelines_verbose = 0
-let g:secure_modelines_modelines = 15
+Bundle 'gmarik/vundle'
+Bundle 'airblade/vim-gitgutter.git'
+Bundle 'arafatm/todohabit.vim.git'
+Bundle 'mattn/gist-vim.git'
+Bundle 'msanders/snipmate.vim.git'
+Bundle 'scottmcginness/vim-jquery.git'
+Bundle 'thinca/vim-ft-markdown_fold.git'
+Bundle 'tpope/vim-fugitive.git'
+Bundle 'tpope/vim-rails.git'
+Bundle 'tpope/vim-bundler.git'
+Bundle 'vim-ruby/vim-ruby.git'
+Bundle 'vim-scripts/JavaScript-Indent.git'
+Bundle 'vim-scripts/Markdown.git'
+Bundle 'rodjek/vim-puppet.git'
 
-set background=dark
+filetype plugin indent on
 
-" Needed on some linux distros.
-" " see
-" http://www.adamlowe.me/2009/12/vim-destroys-all-other-rails-editors.html
-"filetype off 
-call pathogen#infect()
-call pathogen#helptags()
-
-filetype on
-filetype plugin on
-if has("autocmd")
-  filetype indent on
-endif
-
+" ****************************
+" Common settings
 set showcmd			" Show (partial) command in status line.
 set showmatch		" Show matching brackets.
 set ignorecase	" Do case insensitive matching
@@ -30,9 +32,7 @@ set smartcase		" Do smart case matching
 set incsearch		" Incremental search
 set autowrite		" Automatically save before commands like :next and :make
 set hidden      " Hide buffers when they are abandoned
-"set mouse=a			" Enable mouse usage (all modes) in terminals
 
-"set cindent
 set smartindent
 set autoindent
 set shiftwidth=2
@@ -52,8 +52,20 @@ set foldlevel=99
 set cot=menuone
 set cot+=preview
 
+set nomodeline
+let g:secure_modelines_verbose = 0
+let g:secure_modelines_modelines = 15
+
+" ****************************
+" Colors
+set background=dark
+colorscheme koehler
+
 " ****************************
 " FOLDING
+" Map space to toggle fold 
+nnoremap  <silent>  <space> :exe 'silent! normal! za'.(foldlevel('.')?'':'l')<cr>
+
 map ,,0 :set foldlevel=0<cr>
 map ,,1 :set foldlevel=1<cr>
 map ,,2 :set foldlevel=2<cr>
@@ -65,15 +77,12 @@ map ,,7 :set foldlevel=7<cr>
 map ,,8 :set foldlevel=8<cr>
 map ,,9 :set foldlevel=9<cr>
 
-" Map space to toggle fold 
-nnoremap  <silent>  <space> :exe 'silent! normal! za'.(foldlevel('.')?'':'l')<cr>
 
 " ****************************
 " Abbreviations
 iab  ,d  <c-r>=strftime("%Y-%m-%d")<cr>
 iab  ,-  ------------------------------------------------------------
 
-colorscheme koehler
 
 " ****************************
 " Conditional syntax highlighting
@@ -96,20 +105,6 @@ call TextEnableCodeSnip('ruby'   ,'@begin=ruby@'   ,'@end=ruby@'  )
 
 au BufNewFile,BufRead .bashrc,.bash/* call SetFileTypeSH("bash")
 
-"augroup filetypedetect
-" au! BufRead,BufNewFile *.otl          setfiletype vo_base
-"	au! BufRead,BufNewFile *.oln          setfiletype xoutliner
-"augroup END
-
-" TVO
-"au BufNewFile,BufRead,BufEnter *.txt  let g:otl_bold_headers=0
-"au BufNewFile,BufRead,BufEnter *.txt  let g:otl_use_viki=1
-"au BufNewFile,BufRead,BufEnter *.txt  setfiletype txt
-"au BufNewFile,BufRead,BufEnter *.txt  set smartindent
-"au BufNewFile,BufRead,BufEnter *.txt  set tabstop=2
-"au BufNewFile,BufRead,BufEnter *.txt  set shiftwidth=2
-"au BufNewFile,BufRead,BufEnter *.txt  set noexpandtab
-
 augroup filetypedetect
   au BufNewFile,BufRead *.txt setfiletype markdown
   au BufNewFile,BufRead *.txt set formatoptions=tqwan
@@ -118,25 +113,3 @@ augroup filetypedetect
   au BufNewFile,BufRead,BufEnter *.txt  set shiftwidth=2
   au BufNewFile,BufRead,BufEnter *.txt  set expandtab
 augroup END
-
-
-" OMNIFUNC
-
-" if has("autocmd")
-"   " Ruby
-"   autocmd FileType ruby set omnifunc=rubycomplete#Complete
-"   autocmd FileType ruby let g:rubycomplete_buffer_loading=1
-"   autocmd FileType ruby let g:rubycomplete_classes_in_global=1
-"   autocmd FileType ruby set makeprg=ruby\ %
-" 
-"   " JS
-"   autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-"   autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-"   autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-" 
-"   " Misc
-"   autocmd FileType python set omnifunc=pythoncomplete#Complete
-"   autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-"   autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-"   autocmd FileType c set omnifunc=ccomplete#Complete
-" endif
