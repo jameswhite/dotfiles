@@ -3,7 +3,7 @@
 
 " You can also specify a different font, overriding the default font
 if has("win32")
-  set guifont=Andale_Mono:h10:cANSI
+  set guifont=Consolas:h10:cANSI
 else
   set guifont=Terminus\ 12
 endif
