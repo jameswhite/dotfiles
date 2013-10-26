@@ -2,3 +2,5 @@
 source $HOME/.keychain/$HOSTNAME-sh
 
 screen -x main
+
+source $HOME/.bashrc
