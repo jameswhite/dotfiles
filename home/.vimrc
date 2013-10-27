@@ -1,6 +1,7 @@
 set nocompatible               " be iMproved
 filetype off                   " required!
 
+set rtp+=~/.vim               " stupid windows
 execute pathogen#infect()
 syntax on
 filetype plugin indent on
