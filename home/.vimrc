@@ -1,29 +1,9 @@
 set nocompatible               " be iMproved
 filetype off                   " required!
 
-" ****************************
-" Vundle package management
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-
-Bundle 'gmarik/vundle'
-
-Bundle 'airblade/vim-gitgutter.git'
-Bundle 'arafatm/todohabit.vim.git'
-Bundle 'mattn/gist-vim.git'
-Bundle 'msanders/snipmate.vim.git'
-Bundle 'scottmcginness/vim-jquery.git'
-Bundle 'thinca/vim-ft-markdown_fold.git'
-Bundle 'tpope/vim-fugitive.git'
-Bundle 'tpope/vim-rails.git'
-Bundle 'tpope/vim-bundler.git'
-Bundle 'vim-ruby/vim-ruby.git'
-Bundle 'vim-scripts/JavaScript-Indent.git'
-Bundle 'vim-scripts/Markdown.git'
-Bundle 'rodjek/vim-puppet.git'
-
-filetype plugin indent on
+execute pathogen#infect()
 syntax on
+filetype plugin indent on
 
 " ****************************
 " Common settings
