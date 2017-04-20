@@ -1,0 +1,62 @@
+#!/bin/bash
+export DOTFILE_HOME="${HOME}/.dotfiles/home"
+usage(){
+  echo "$0 { -a | -r } <file_under_HOME>"
+}
+
+while [ ! -z "$*" ];do
+  case $1 in
+    -a)
+      ACTION='add'
+      shift 1
+    ;;
+    -r)
+      ACTION='remove'
+      shift 1
+    ;;
+    *)
+      FILE="$1";
+      shift 1
+    ;;
+  esac
+done
+
+if [ -z "${ACTION}" ]; then
+  usage
+  exit 1
+fi
+
+case "${ACTION}" in
+  "add")
+     DIRECTORY="$(cd $(dirname $FILE); pwd)"
+     RELATIVE_PATH=$(echo "$DIRECTORY" | sed -e "s+${HOME}/++")
+     if [ "$RELATIVE_PATH" == "$DIRECTORY" ];then
+       echo "Error: Only manages files under $HOME"
+       exit 1
+     fi
+     [ ! -d "${DOTFILE_HOME}/$RELATIVE_PATH" ] && mkdir -p "${DOTFILE_HOME}/$RELATIVE_PATH"
+     mv "${HOME}/$RELATIVE_PATH/$(basename $FILE)" "${DOTFILE_HOME}/$RELATIVE_PATH/$(basename $FILE)" &&  \
+       ( cd "${HOME}/$RELATIVE_PATH"; ln -s "${DOTFILE_HOME}/$RELATIVE_PATH/$(basename $FILE)" ) &&  \
+       ( cd "${DOTFILE_HOME}/$RELATIVE_PATH" && git add "$(basename $FILE)" && git commit -a -m "managing ${HOME}/$RELATIVE_PATH/$(basename $FILE)" )
+  ;;
+  "remove")
+     DIRECTORY="$(cd $(dirname $FILE); pwd)"
+     RELATIVE_PATH=$(echo "$DIRECTORY" | sed -e "s+${HOME}/++")
+     if [ "$RELATIVE_PATH" == "$DIRECTORY" ];then
+       echo "Error: Only manages files under $HOME"
+       exit 1
+     fi
+     if [ ! -h ${HOME}/$RELATIVE_PATH/$(basename $FILE) ]; then
+       echo "does not seem to be dotmanaged"
+       exit 1
+     else
+       unlink "${HOME}/$RELATIVE_PATH/$(basename $FILE)" && \
+       cp "${DOTFILE_HOME}/$RELATIVE_PATH/$(basename $FILE)" "${HOME}/$RELATIVE_PATH/$(basename $FILE)"
+       ( cd "${DOTFILE_HOME}/$RELATIVE_PATH" && git rm "$(basename $FILE)" && git commit -a -m "no longer managing ${HOME}/$RELATIVE_PATH/$(basename $FILE)" )
+     fi
+  ;;
+  *)
+    usage
+    exit 1
+  ;;
+esac
