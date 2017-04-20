@@ -1,5 +1,5 @@
 #!/bin/bash
-export DOTFILE_HOME="${HOME}/.dotfiles/home"
+export DOTFILE_HOME="$(cd ${HOME}/.dotfiles/home ; pwd)"
 usage(){
   echo "$0 { -a | -r } <file_under_HOME>"
 }
@@ -62,7 +62,28 @@ case "${ACTION}" in
   "init")
     find "${DOTFILE_HOME}" -type f | while read FILE; do
       DIRECTORY="$(cd $(dirname $FILE); pwd)"
-      RELATIVE_PATH=$(echo "$DIRECTORY" | sed -e "s+${HOME}/++")
+      RELATIVE_PATH=$(echo "$DIRECTORY" | sed -e "s+${DOTFILE_HOME}++" | sed -e 's+^/++')
+      if [ -z "${RELATIVE_PATH}" ]; then
+        TARGET="$(basename $FILE)"
+      else
+        TARGET="$RELATIVE_PATH/$(basename $FILE)"
+      fi
+      if [ ! -L "${HOME}/${TARGET}" ] ; then
+        echo "${HOME}/${TARGET} exists and is not a symlink, skipping..."
+      else
+        if [ -h "${HOME}/${TARGET}" ] ; then
+          if [ "$( readlink ${HOME}/${TARGET} )" != "${DOTFILE_HOME}/${TARGET}" ]; then
+            echo "relinking $FILE"
+            unlink "${HOME}/${TARGET}"
+            ( cd "${HOME}/$RELATIVE_PATH"; ln -s "${DOTFILE_HOME}/${TARGET}" )
+          else
+            echo "looks good! : ${HOME}/${TARGET}"
+          fi
+        else
+          echo "linking $FILE"
+          ( cd "${HOME}/$RELATIVE_PATH"; ln -s "${DOTFILE_HOME}/${TARGET})" )
+        fi
+      fi
     done
   ;;
   *)
