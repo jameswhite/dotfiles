@@ -5,7 +5,7 @@ git clone https://github.com/jameswhite/dotfiles $HOME/.dotfiles
 bash $HOME/.dotfiles/scripts/pull
 ```
 
-``
+```
  + .dotfiles
     + README.md       you're reading it!
     + home/
