@@ -1,2 +1,2 @@
 #!/bin/bash
-$(dirname $0)/../home/bin/dotmanaged -i
+$(dirname $0)/../home/bin/dotmanage -i
