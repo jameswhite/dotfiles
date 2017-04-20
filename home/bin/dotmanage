@@ -68,8 +68,8 @@ case "${ACTION}" in
       else
         TARGET="$RELATIVE_PATH/$(basename $FILE)"
       fi
-      if [ ! -L "${HOME}/${TARGET}" ] ; then
-        echo "${HOME}/${TARGET} exists and is not a symlink, skipping..."
+      if [ -f "${HOME}/${TARGET}" -a ! -L "${HOME}/${TARGET}" ] ; then
+        echo "${HOME}/${TARGET} exists and is not a symlink, moving to ${HOME}/${TARGET}.ndm ..."
       else
         if [ -h "${HOME}/${TARGET}" ] ; then
           if [ "$( readlink ${HOME}/${TARGET} )" != "${DOTFILE_HOME}/${TARGET}" ]; then
