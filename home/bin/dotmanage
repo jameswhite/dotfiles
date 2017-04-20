@@ -81,7 +81,7 @@ case "${ACTION}" in
           fi
         else
           echo "linking $FILE"
-          ( cd "${HOME}/$RELATIVE_PATH"; ln -s "${DOTFILE_HOME}/${TARGET})" )
+          ( cd "${HOME}/$RELATIVE_PATH"; ln -s "${DOTFILE_HOME}/${TARGET}" )
         fi
       fi
     done
