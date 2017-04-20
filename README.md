@@ -16,3 +16,6 @@ bash $HOME/.dotfiles/scripts/pull
     | .somedir/       a dotfile directory
     + scripts/        scripts for managing dotfiles
 ```
+
+export DOTFILE_HOME="${HOME}/.dotfiles/home"
+mv .tmux.conf ${DOTFILE_HOME}/; (cd; ln -s ${DOTFILE_HOME}/.tmux.conf)
