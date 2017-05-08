@@ -36,7 +36,7 @@ augroup encrypted
 
   " Convert all text to encrypted text before writing
   " (If you use tcsh, you may need to alter this line.)
-  autocmd BufWritePre,FileWritePre *.gpg '[,']!gpg --default-recipient-self -ae 2>/dev/null
+  autocmd BufWritePre,FileWritePre *.gpg '[,']!gpg --default-recipient-self --sign -ae 2>/dev/null
   " Undo the encryption so we are back in the normal text, directly
   " after the file has been written.
   autocmd BufWritePost,FileWritePost *.gpg u
