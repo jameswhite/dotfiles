@@ -30,6 +30,9 @@ if [[ $(uname) == Darwin ]]; then
   # export SSH_AUTH_SOCK
 fi
 
+[ -f "${HOME}tmp/git.err" ] && /bin/rm "${HOME}tmp/git.err"
+(cd ${HOME}/.dotfiles; git pull origin master > /dev/null 2>"${HOME}tmp/git.err"; cat "${HOME}tmp/git.err")
+
 # Source our encrypted .bash_profile
 # . <(gpg --no-tty -qd ${HOME}/.bash_profile.gpg)
 
