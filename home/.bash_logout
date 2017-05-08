@@ -1,4 +1,3 @@
-echo "bye"
 (
   cd "${HOME}/.dotfiles"
   git status | egrep -q "(modified|new)"
@@ -13,3 +12,4 @@ echo "bye"
     fi
   fi
 )
+echo "bye"
