@@ -1,2 +1,3 @@
-https://github.com/rodjek/vim-puppet       ${HOME}/.vim/bundle/vim-puppet
-https://github.com/scrooloose/nerdtree.git ${HOME}/.vim/bundle/nerdtree
+https://github.com/rodjek/vim-puppet        ${HOME}/.vim/bundle/vim-puppet
+https://github.com/scrooloose/nerdtree.git  ${HOME}/.vim/bundle/nerdtree
+https://github.com/vim-utils/vim-ruby-fold  ${HOME}/.vim/bundle/vim-ruby-fold
