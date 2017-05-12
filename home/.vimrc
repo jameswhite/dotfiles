@@ -3,7 +3,6 @@ call pathogen#infect()
 map <C-n> :NERDTreeToggle<CR>
 map <C-l> :tabn<CR>
 map <C-h> :tabp<CR>
-map <C-n> :tabnew<CR>
 
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
