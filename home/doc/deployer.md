@@ -1,6 +1,7 @@
 Raspberry Pi:
 <details>
 <summary>Set up minicom, serial console a soekris 5501 with a pl2303 adapter</summary>
+
 ```
 apt-get install -y minicom
 cat<<EOF> /root/minirc.ttyUSB0
@@ -105,6 +106,5 @@ subnet 10.255.1.0 netmask 255.255.255.0 {
   deny unknown-clients;
 }
 EOF
-
 ```
 </details>
