@@ -1,6 +1,6 @@
 Raspberry Pi:
 <details>
-<summary>Set up minicom, serial console a soekris 5501 with a pl2303 adapter</summary?
+<summary>Set up minicom, serial console a soekris 5501 with a pl2303 adapter</summary>
 ```
 apt-get install -y minicom
 cat<<EOF> /root/minirc.ttyUSB0
@@ -76,6 +76,7 @@ CLIENT MAC ADDR: 00 00 24 CC 5B 00.
 
 ```
 </details>
+
 <details>
 <summary>DHCP</summary>
 
