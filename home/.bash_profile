@@ -26,6 +26,7 @@ if [[ $(uname) == Darwin ]]; then
     echo "GPG_AGENT_INFO=/tmp/gpg-GsKLoe/S.gpg-agent; export GPG_AGENT_INFO;" > "${HOME}/.gnupg/gpg-agent-info"
   fi
   . "${HOME}/.gnupg/gpg-agent-info"
+  export GPG_TTY=$(tty)
   export GPG_AGENT_INFO
   # export SSH_AUTH_SOCK
 fi
