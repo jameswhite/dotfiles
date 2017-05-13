@@ -1,4 +1,3 @@
-Raspberry Pi:
 <details>
 <summary>Set up minicom, serial console a soekris 5501 with a pl2303 adapter</summary>
 
