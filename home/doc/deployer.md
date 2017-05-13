@@ -35,8 +35,9 @@ EOF
 </details>
 
 Use a minicom session to grab the MAC Address the soekris will attempt to PXE boot from
-<summary>sample output</sample>
+
 <details>
+<summary>sample output</sample>
 
 ```
 minicom ttyUSB0
