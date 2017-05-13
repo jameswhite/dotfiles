@@ -29,11 +29,10 @@ pu rtscts           No
 EOF
 
 ```
-</details>
 
 Use a minicom session to grab the MAC Address the soekris will attempt to PXE boot from
 
-sample output:
+sample session output:
 ```
 minicom ttyUSB0
 Welcome to minicom 2.7
@@ -98,10 +97,10 @@ CLIENT MAC ADDR: 00 00 24 CC 5B 00.
 <details>
 <summary>DHCP</summary>
 
-
 Set up DHCP
   - wlan0: 10.255.3.101/24 (uplink)
   - eth0:  10.255.1.101/24 (downlink)
+
 ```
 apt-get install -y isc-dhcp-server
 
