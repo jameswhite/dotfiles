@@ -11,11 +11,9 @@ We also need a host we'll be installing OpenBSD on:
   - One switch per network (up to 4, as the soekris 5501 has 4 NICs)
 
 </details>
-<details>
-<summary>Set up minicom, serial console a soekris 5501 with a pl2303 adapter</summary>
 
 <details>
-<summary>command-line</summary>
+<summary>Set up minicom, serial console a soekris 5501 with a pl2303 adapter</summary>
 
 ```
 apt-get install -y minicom
@@ -31,14 +29,11 @@ pu rtscts           No
 EOF
 
 ```
-
 </details>
 
 Use a minicom session to grab the MAC Address the soekris will attempt to PXE boot from
 
-<details>
-<summary>sample output</sample>
-
+sample output:
 ```
 minicom ttyUSB0
 Welcome to minicom 2.7
@@ -98,8 +93,6 @@ VIA Rhine III Management Adapter v2.43 (2005/12/15)
 CLIENT MAC ADDR: 00 00 24 CC 5B 00.
 
 ```
-
-</details>
 </details>
 
 <details>
