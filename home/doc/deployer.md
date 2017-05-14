@@ -328,3 +328,33 @@ This will keep it from going into an infinite re-install loop.
              }
 ```
 </details>
+
+#### Additional Hosts
+<details>
+Adding additional hosts:
+<summary>Troubleshooting the deployment process.</summary>
+
+Console the device, (it defaults to 19200 8n1, set it to 38400 8n1)
+Set BootDrive=F0 80 81 FF to make it pxe boot to reveal the MAC address.
+Get the MAC address:  00 00 24 CC E9 E4
+
+add a host entry to `/etc/dhcp/dhcpd.conf`
+
+```
+host fandral {
+                 hardware ethernet 0:0:24:cc:e9:e4;
+                 fixed-address 10.255.1.106;
+                 next-server 10.255.1.101;
+                 filename "auto_install";
+                 server-name "10.255.1.101";
+             }
+```
+
+Bounce dhpcd `/etc/init.d/isc-dhcp-server restart`
+Create a /var/www/html/00:00:24:cc:e9:e4-install.conf` and symlink it to `fandral-install.conf`
+Reboot the device.
+Once it says Installing bsd, comment out `next-server`, `filename`, and `server-name` and restart `isc-dhcp-server`
+
+Repeat as necessary for all soekris boxes.
+
+</details>
