@@ -28,12 +28,21 @@ apt-get install -y nginx rsync
 wget -O /tmp/install61.iso "ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/install61.iso"
 mount -o loop /tmp/install61.iso /mnt/
 rsync -avzPC /mnt/ /var/www/html/openbsd/install61/
-
-# If you don't create an index.txt the installer throws its hands up.
-(cd /var/www/html/openbsd/install61/6.1/i386; ls -ln > index.txt)
 umount /mnt
 
 ```
+
+If you don't create an index.txt the installer throws its hands up.
+
+```
+(cd /var/www/html/openbsd/install61/6.1/i386; ls -ln > index.txt)
+
+```
+
+
+Auto indexing is evidently something the OpenBSD installer relies on:
+Add `autoindex on;` to the `server` section of `/etc/nginx/sites-enabled/default` and `/etc/init.d/nginx restart`
+
 </details>
 
 #### TFTP
@@ -260,7 +269,8 @@ Location of sets = http
 HTTP proxy URL = none
 HTTP Server = 10.255.1.101
 Server directory = openbsd/install61/6.1/i386/
-Set name(s)? = -all bsd bsd.rd bsd.mp base60.tgz comp60.tgz man60.tgz game60.tgz done
+Use http instead = yes
+Set name(s)? = -all bsd bsd.rd bsd.mp base61.tgz comp61.tgz man61.tgz game61.tgz done
 Directory does not contain SHA256.sig. Continue without verification = yes
 Location of sets? = done
 EOF
@@ -305,4 +315,16 @@ tcpdump -i eth0 port 69
 
 The nginx log is `/var/log/nginx/access.log`. Look for it to pull down the `<macaddress>-install.conf`
 
+Once the serial console says it's `Installing bsd` comment out everything in the `host hogun` block in `/etc/dhcp/dhcpd.conf` except the harware and fixed-address lines:
+This will keep it from going into an infinite re-install loop.
+
+```
+  host hogun {
+               hardware ethernet 0:0:24:cc:5b:00;
+               fixed-address 10.255.1.105;
+               # next-server 10.255.1.101;
+               # filename "auto_install";
+               # server-name "10.255.1.101";
+             }
+```
 </details>
