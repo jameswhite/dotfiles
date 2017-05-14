@@ -1,3 +1,4 @@
+  1. Hardware
 <details>
 <summary>Hardware requirements</summary>
 We need a host to deploy our soekris boxes.
@@ -12,7 +13,7 @@ We also need a host we'll be installing OpenBSD on:
 
 </details>
 
-You'll need a copy of the OpenBSD install media staged on a web server from which to install.
+  1. You'll need a copy of the OpenBSD install media staged on a web server from which to install.
 <details>
 <summary>Preparing the OpenBSD install space.</summary>
 
@@ -32,7 +33,7 @@ rm /tmp/install61.iso
 
 </details>
 
-You'll need to install and configure the Trivial File Transfer Protocol (TFTP) Service.
+  1. You'll need to install and configure the Trivial File Transfer Protocol (TFTP) Service.
 <details>
 <summary>Preparing the TFTP service.</summary>
 
@@ -52,10 +53,21 @@ EOF
 /etc/init.d/tftpd-hpa restart
 
 (
-  cd /srv/tftp
-  wget ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/pxeboot
-  wget ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/bsd.rd
-  wget ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/install60.iso
+  wget -o /srv/tftp/pxeboot.openbsd ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/pxeboot
+
+  [ ! -d /srv/tftp/pxelinux.kernels/openbsd/6.1 ] && \
+    mkdir -p /srv/tftp/pxelinux.kernels/openbsd/6.1
+  wget -o /srv/tftp/pxelinux.kernels/openbsd/6.1/bsd.rd \
+    ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/bsd.rd
+
+  [ ! -d /srv/tftp/etc ] && \
+    mkdir -p /srv/tftp/etc
+cat<<EOF > cat /srv/tftp/etc/boot.conf
+set tty com0
+stty com0 38400
+boot pxelinux.kernels/openbsd/6.0/bsd.rd
+EOF
+
 ```
 
 </details>
