@@ -18,6 +18,7 @@ You'll need a copy of the OpenBSD install media staged on a web server from whic
 
 Decide which version of openBSD to install: ftp://mirror.esc7.net/pub/OpenBSD/
 Download the iso and copy it to some place served up by nginx.
+We'll use 6.1 in the following examples.
 
 ```
 apt-get install -y nginx rsync
@@ -36,7 +37,26 @@ You'll need to install and configure the Trivial File Transfer Protocol (TFTP) S
 <summary>Preparing the TFTP service.</summary>
 
 ```
-apt-get install -y tftp-hpa
+apt-get install -y tftpd-hpa
+[ ! -d /etc/default/tftpd-hpa.dist ] && cp /etc/default/tftpd-hpa /etc/default/tftpd-hpa.dist
+cat<<EOF> /etc/default/tftpd-hpa
+# /etc/default/tftpd-hpa
+
+TFTP_USERNAME="tftp"
+TFTP_DIRECTORY="/srv/tftp"
+TFTP_ADDRESS="0.0.0.0:69"
+# TFTP_OPTIONS="-4 --secure --create"
+TFTP_OPTIONS="-4 --secure"
+EOF
+
+/etc/init.d/tftpd-hpa restart
+
+(
+  cd /srv/tftp
+  wget ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/pxeboot
+  wget ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/bsd.rd
+  wget ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/install60.iso
+```
 
 </details>
 
