@@ -27,7 +27,7 @@ apt-get install -y nginx rsync
 [ ! -d /var/www/html/openbsd/install61 ] && mkdir -p /var/www/html/openbsd/install61
 wget -O /tmp/install61.iso "ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/install61.iso"
 mount -o loop /tmp/install61.iso /mnt/
-rsync -avzPC /mnt/ /var/www/html/openbsd/install60/
+rsync -avzPC /mnt/ /var/www/html/openbsd/install61/
 umount /mnt
 
 ```
