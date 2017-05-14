@@ -1,22 +1,22 @@
-  1. Hardware
+#### Hardware
+We need a deploy host, as well as target hosts to which we will be deploying.
 <details>
 <summary>Hardware requirements</summary>
-We need a host to deploy our soekris boxes.
-
+##### Deployer
+The inital host that deploys OpenBSD.
   - Rasbberry pi 2 (I used a kano kit with kano HDMI monitor)
   - 64GB Compact flash
 
-We also need a host we'll be installing OpenBSD on:
-
+##### Targets
+We also need target hosts onto which we'll be installing OpenBSD.
   - Soekris net5501 (at least 2) for a redundant firewall
   - One switch per network (up to 4, as the soekris 5501 has 4 NICs)
-
 </details>
 
-  1. You'll need a copy of the OpenBSD install media staged on a web server from which to install.
+#### Installation Media
+  You'll need a copy of the OpenBSD install media staged on the deploy server from which to install.
 <details>
 <summary>Preparing the OpenBSD install space.</summary>
-
 Decide which version of openBSD to install: ftp://mirror.esc7.net/pub/OpenBSD/
 Download the iso and copy it to some place served up by nginx.
 We'll use 6.1 in the following examples.
@@ -29,11 +29,12 @@ mount -o loop /tmp/install61.iso /mnt/
 rsync -avzPC /mnt/ /usr/share/nginx/html/openbsd/install60/
 umount /mnt
 rm /tmp/install61.iso
-```
 
+```
 </details>
 
-  1. You'll need to install and configure the Trivial File Transfer Protocol (TFTP) Service.
+#### TFTP
+You'll need to install and configure the Trivial File Transfer Protocol (TFTP) Service.
 <details>
 <summary>Preparing the TFTP service.</summary>
 
@@ -69,11 +70,12 @@ boot pxelinux.kernels/openbsd/6.0/bsd.rd
 EOF
 
 ```
-
 </details>
 
 --
 
+#### Serial Console
+We'll need to console the target from the deployer in order to get the target's MAC address.
 <details>
 <summary>Set up minicom, serial console a soekris 5501 with a pl2303 adapter</summary>
 
