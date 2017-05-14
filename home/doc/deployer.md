@@ -2,12 +2,13 @@
 We need a deploy host, as well as target hosts to which we will be deploying.
 <details>
 <summary>Hardware requirements</summary>
-##### Deployer
+
+*Deployer:*
 The inital host that deploys OpenBSD.
   - Rasbberry pi 2 (I used a kano kit with kano HDMI monitor)
   - 64GB Compact flash
 
-##### Targets
+*Targets:*
 We also need target hosts onto which we'll be installing OpenBSD.
   - Soekris net5501 (at least 2) for a redundant firewall
   - One switch per network (up to 4, as the soekris 5501 has 4 NICs)
@@ -52,27 +53,44 @@ TFTP_OPTIONS="-4 --secure"
 EOF
 
 /etc/init.d/tftpd-hpa restart
+```
 
+Get the files the boostrap process will need:
+
+```
 (
-  wget -o /srv/tftp/pxeboot.openbsd ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/pxeboot
+  wget -O /srv/tftp/pxeboot.openbsd ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/pxeboot
+  (cd /srv/tftp; ln -s pxeboot.openbsd auto_install)
 
   [ ! -d /srv/tftp/pxelinux.kernels/openbsd/6.1 ] && \
     mkdir -p /srv/tftp/pxelinux.kernels/openbsd/6.1
-  wget -o /srv/tftp/pxelinux.kernels/openbsd/6.1/bsd.rd \
+  wget -O /srv/tftp/pxelinux.kernels/openbsd/6.1/bsd.rd \
     ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/bsd.rd
 
   [ ! -d /srv/tftp/etc ] && \
     mkdir -p /srv/tftp/etc
-cat<<EOF > cat /srv/tftp/etc/boot.conf
+cat<<EOF > /srv/tftp/etc/boot.conf
 set tty com0
 stty com0 38400
-boot pxelinux.kernels/openbsd/6.0/bsd.rd
+boot pxelinux.kernels/openbsd/6.1/bsd.rd
 EOF
 
 ```
-</details>
 
---
+Ensure you can download files via tftp: (This will save you a lot of grief later.)
+From your workstation:
+
+```
+$ cd /tmp
+$ tftp 10.255.1.101
+tftp> get auto_install
+Received 97444 bytes in 8.5 seconds
+tftp> get etc/boot.conf
+Received 73 bytes in 0.0 seconds
+tftp> get pxelinux.kernels/openbsd/6.1/bsd.rd
+
+```
+</details>
 
 #### Serial Console
 We'll need to console the target from the deployer in order to get the target's MAC address.
@@ -158,7 +176,9 @@ CLIENT MAC ADDR: 00 00 24 CC 5B 00.
 ```
 </details>
 
+#### DHCP
 <details>
+DHCP is used to bootstrap PXE, which bootstraps TFTP
 <summary>DHCP</summary>
 
 Set up DHCP
@@ -170,7 +190,7 @@ apt-get install -y isc-dhcp-server
 
 cat<<EOF > /etc/dhcp/dhpcd.conf
 ddns-update-style none;
-option domain-name "apartment.jameswhite.org
+option domain-name "apt.jameswhite.org";
 option domain-name-servers 10.255.1.101;
 default-lease-time 600;
 max-lease-time 7200;
@@ -184,7 +204,94 @@ subnet 10.255.1.0 netmask 255.255.255.0 {
   option routers 10.255.1.101;
   # clients
   deny unknown-clients;
+
+  host hogun {
+               hardware ethernet 0:0:24:cc:5b:00;
+               next-server 10.255.1.101;
+               fixed-address 10.255.1.102;
+               filename "auto_install";
+               server-name "hogun";
+             }
 }
+
 EOF
+/etc/init.d/isc-dhcp-server restart
 ```
+
+Now when the target is booted, it will query DHCP, and dhcpd will tell it to download `auto_install` from `next-server 10.255.1.101;` (deployer) over tftp. We symlinked `auto_install` to `pxeboot.openbsd` back in the [TFTP section](https://github.com/jameswhite/dotfiles/blob/master/home/doc/deployer.md#tftp).
+The `pxeboot.openbsd` file pulls down `etc/boot.conf` from tftp, which we created back in the [TFTP section](https://github.com/jameswhite/dotfiles/blob/master/home/doc/deployer.md#tftp) and it says to download `pxelinux.kernels/openbsd/6.1/bsd.rd`
+The `bsd.rd` makes some assumptions, and tells the target to try to grab a file named `00:00:24:cc:5b:00-install.conf` (the target's MAC address) from `next-server 10.255.1.101;`, so we'd better put it there.
+
+This creates the answerfile for hogun (our target.)
+```
+cat<<EOF > /usr/share/nginx/html/00:00:24:cc:5b:00-install.conf
+System hostname = hogun
+Terminal type? = vt220
+System hostname = hogun
+Which network interface do you wish to configure? = vr0
+IPv4 address for em0 = dhcp
+#  Password for root = bearing-cajole-envision-hew-mangrove-algiers
+Password for root account? = $2y$10$K7h8pG4gZnl2sG6E2AybPupvp3fzoWy6ElmShBAdKIS9Jidnh0M3u
+Public ssh key for root account? = ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDLuHahxjD7lAWGpE1LLFXenj+90WcMBzZNdw1OuCqOR9ioJag/atjKRuV7e/SiZ2ITtArjsz/YRCsgdaB34YTovFVf5U59uGuiawfa2zpTk8TmojvpcNqNOll4kM6Fa280Uu89cy8aCANhPnnZC4l9YBuuemCDllFPvcUTkN5GpIr0eWEsI+ZbCW4jDsLsZHCFMJ0MbeRfJR1wqid+AgB3xeEIJulpqinWkx3IyGHDnG//A4AglXw7ndz0gxEeE1JAtvVX20CgZPFdRk4UivU8MtLffAh5G/gCYsDjKXHaZaswpvQAf3BcI1WuBqfA2KwP2GJLw93wmbb0euWCwJfYUobeedjxWUzscYzY5yCadPZla+FGEPCbTeRK525OxgRkxXRzW2Tlidba8wKI0xMJ66ZqizRV4wBJvEZDOI+s+kAuPEHR7RIHmagfEUUHQQFKOFxIsfBYnA5Bo12HVopEkbImQTJrAu0mwwChZD+TgOtfRLs35Cgn5uBbHGU+DKt47uMN/ZTWL/CaFX+mDv3fB1W3bB1b3g6GxpttHBtESddNXeeMY5TfT8ffMj/uOQ2aZWOwqFIlDqtvbuNxLCpjGGJKM0FFZMVq9JQ01aEF98oNNv0cwJ5fUNijndF3n7D1sfEo4mt/Fe2Ni7muusWAAjMs6BCP9cHRKj+Lgio/Yw== jameswhite@forseti.local
+Start sshd(8) by default? = yes
+Start ntpd(8) by default? = yes
+NTP server? (hostname or 'default') = default
+Do you expect to run the X Window System? = no
+Change the default console to com0? = yes
+Which speed should com0 use? (or 'done') = 38400
+What timezone are you in? = UTC
+Which disk is the root disk? = sd0
+Setup a user = opt
+#  Password for user = thrush-towel-rhizome-iodide-sleek-charisma
+Password for user = $2y$10$7ieMw0.SjpubhVay2OeN2O/JSCmXyEcEjp3UkX9pP2IZpVqK8xSti
+Use DUIDs rather than device names in fstab? = yes
+Use (W)hole disk or (E)dit the MBR? = W
+Use (A)uto layout, (E)dit auto layout, or create (C)ustom layout? = a
+# URL to autopartitioning template = http://10.255.1.101/openbsd/openbsd_autodisklabel
+Which disk do you wish to initialize? = done
+Location of sets = http
+HTTP proxy URL = none
+HTTP Server = 10.255.1.101
+Server directory = openbsd/install61/6.1/i386/
+Set name(s)? = -all bsd bsd.rd bsd.mp base60.tgz comp60.tgz man60.tgz game60.tgz done
+Directory does not contain SHA256.sig. Continue without verification = yes
+Location of sets? = done
+EOF
+
+# Make a symlink so we know what file is what later.
+ln -s /usr/share/nginx/html/00:00:24:cc:5b:00-install.conf /usr/share/nginx/html/hogun-install.conf
+
+```
+
 </details>
+
+#### PXE booting and installing the target
+With the target set to boot from PXE, and the deployer listening on DHCP, TFTP, and HTTP, deploy our target.
+<details>
+<summary>Troubleshooting the deployment process.</summary>
+
+Attach to the serial console of the target with `minicom ttyUSB0` We wired this up in [Serial Console](https://github.com/jameswhite/dotfiles/blob/master/home/doc/deployer.md#serial-console).
+You should see it request PXE, get an IP address, and pull down the `auto_install` file.
+
+The log for dhcpd is `/var/log/syslog`, so `tail  -f /var/log/syslog` on the deployer.
+Sample Output:
+
+```
+May 14 19:34:33 deployer dhcpd: DHCPREQUEST for 10.255.3.59 from 24:a2:e1:16:57:72 via wlan0: unknown lease 10.255.3.59.
+May 14 19:34:36 deployer dhcpd: DHCPDISCOVER from 00:00:24:cc:5b:00 via eth0
+May 14 19:34:36 deployer dhcpd: DHCPOFFER on 10.255.1.102 to 00:00:24:cc:5b:00 via eth0
+May 14 19:34:37 deployer dhcpd: DHCPREQUEST for 10.255.1.102 (10.255.1.101) from 00:00:24:cc:5b:00 via eth0
+May 14 19:34:37 deployer dhcpd: DHCPACK on 10.255.1.102 to 00:00:24:cc:5b:00 via eth0
+```
+
+Having tcpdump running on port 69 (tftp) is also helpful. You should see a lot of activity at the same time that the console is trying to PXE boot.
+
+```
+apt-get install -y tcpdump
+tcpdump -i eth0 port 69
+```
+
+You should see
+
+</details>
+
