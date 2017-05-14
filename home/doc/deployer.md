@@ -332,7 +332,7 @@ This will keep it from going into an infinite re-install loop.
 #### Additional Hosts
 <details>
 Adding additional hosts:
-<summary>Troubleshooting the deployment process.</summary>
+<summary>Deploying additional hosts:</summary>
 
 Console the device, (it defaults to 19200 8n1, set it to 38400 8n1)
 Set BootDrive=F0 80 81 FF to make it pxe boot to reveal the MAC address.
