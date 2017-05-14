@@ -1,8 +1,8 @@
 <details>
-<summary>hardware</summary>
+<summary>Hardware requirements</summary>
 We need a host to deploy our soekris boxes.
 
-  - Rasbberry pi 2, (kano kit with monitor)
+  - Rasbberry pi 2 (I used a kano kit with kano HDMI monitor)
   - 64GB Compact flash
 
 We also need a host we'll be installing OpenBSD on:
@@ -11,6 +11,36 @@ We also need a host we'll be installing OpenBSD on:
   - One switch per network (up to 4, as the soekris 5501 has 4 NICs)
 
 </details>
+
+You'll need a copy of the OpenBSD install media staged on a web server from which to install.
+<details>
+<summary>Preparing the OpenBSD install space.</summary>
+
+Decide which version of openBSD to install: ftp://mirror.esc7.net/pub/OpenBSD/
+Download the iso and copy it to some place served up by nginx.
+
+```
+apt-get install -y nginx rsync
+[ ! -d /usr/share/nginx/html/openbsd/install61 ] && mkdir -p /usr/share/nginx/html/openbsd/install61
+wget -O /tmp/install61.iso "ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/install61.iso"
+mount -o loop /tmp/install61.iso /mnt/
+rsync -avzPC /mnt/ /usr/share/nginx/html/openbsd/install60/
+umount /mnt
+rm /tmp/install61.iso
+```
+
+</details>
+
+You'll need to install and configure the Trivial File Transfer Protocol (TFTP) Service.
+<details>
+<summary>Preparing the TFTP service.</summary>
+
+```
+apt-get install -y tftp-hpa
+
+</details>
+
+--
 
 <details>
 <summary>Set up minicom, serial console a soekris 5501 with a pl2303 adapter</summary>
