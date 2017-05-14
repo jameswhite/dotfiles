@@ -24,12 +24,11 @@ We'll use 6.1 in the following examples.
 
 ```
 apt-get install -y nginx rsync
-[ ! -d /usr/share/nginx/html/openbsd/install61 ] && mkdir -p /usr/share/nginx/html/openbsd/install61
+[ ! -d /var/www/html/openbsd/install61 ] && mkdir -p /var/www/html/openbsd/install61
 wget -O /tmp/install61.iso "ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/install61.iso"
 mount -o loop /tmp/install61.iso /mnt/
-rsync -avzPC /mnt/ /usr/share/nginx/html/openbsd/install60/
+rsync -avzPC /mnt/ /var/www/html/openbsd/install60/
 umount /mnt
-rm /tmp/install61.iso
 
 ```
 </details>
@@ -62,10 +61,12 @@ Get the files the boostrap process will need:
   wget -O /srv/tftp/pxeboot.openbsd ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/pxeboot
   (cd /srv/tftp; ln -s pxeboot.openbsd auto_install)
 
+  mount -o loop /tmp/install61.iso /mnt/
   [ ! -d /srv/tftp/pxelinux.kernels/openbsd/6.1 ] && \
     mkdir -p /srv/tftp/pxelinux.kernels/openbsd/6.1
-  wget -O /srv/tftp/pxelinux.kernels/openbsd/6.1/bsd.rd \
-    ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/bsd.rd
+  mount -o loop /tmp/install61.iso /mnt/
+  cp /mnt/6.1/i386/bsd.rd /srv/tftp/pxelinux.kernels/openbsd/6.1/bsd.rd
+  umount /mnt
 
   [ ! -d /srv/tftp/etc ] && \
     mkdir -p /srv/tftp/etc
@@ -74,6 +75,9 @@ set tty com0
 stty com0 38400
 boot pxelinux.kernels/openbsd/6.1/bsd.rd
 EOF
+
+dd if=/dev/random of=/srv/tftp/etc/random.seed bs=512 count=1
+chmod 644 /srv/tftp/etc/random.seed
 
 ```
 
@@ -186,7 +190,7 @@ Set up DHCP
   - eth0:  10.255.1.101/24 (downlink)
 
 ```
-apt-get install -y isc-dhcp-server
+apt-get install -y isc-dhcp-server bind9
 
 cat<<EOF > /etc/dhcp/dhpcd.conf
 ddns-update-style none;
@@ -208,9 +212,9 @@ subnet 10.255.1.0 netmask 255.255.255.0 {
   host hogun {
                hardware ethernet 0:0:24:cc:5b:00;
                next-server 10.255.1.101;
-               fixed-address 10.255.1.102;
+               fixed-address 10.255.1.105;
                filename "auto_install";
-               server-name "hogun";
+               server-name "10.255.1.101";
              }
 }
 
@@ -224,7 +228,7 @@ The `bsd.rd` makes some assumptions, and tells the target to try to grab a file 
 
 This creates the answerfile for hogun (our target.)
 ```
-cat<<EOF > /usr/share/nginx/html/00:00:24:cc:5b:00-install.conf
+cat<<EOF > /var/www/html/00:00:24:cc:5b:00-install.conf
 System hostname = hogun
 Terminal type? = vt220
 System hostname = hogun
@@ -259,7 +263,7 @@ Location of sets? = done
 EOF
 
 # Make a symlink so we know what file is what later.
-ln -s /usr/share/nginx/html/00:00:24:cc:5b:00-install.conf /usr/share/nginx/html/hogun-install.conf
+(cd /var/www; ln -s 00:00:24:cc:5b:00-install.conf hogun-install.conf)
 
 ```
 
@@ -277,7 +281,6 @@ The log for dhcpd is `/var/log/syslog`, so `tail  -f /var/log/syslog` on the dep
 Sample Output:
 
 ```
-May 14 19:34:33 deployer dhcpd: DHCPREQUEST for 10.255.3.59 from 24:a2:e1:16:57:72 via wlan0: unknown lease 10.255.3.59.
 May 14 19:34:36 deployer dhcpd: DHCPDISCOVER from 00:00:24:cc:5b:00 via eth0
 May 14 19:34:36 deployer dhcpd: DHCPOFFER on 10.255.1.102 to 00:00:24:cc:5b:00 via eth0
 May 14 19:34:37 deployer dhcpd: DHCPREQUEST for 10.255.1.102 (10.255.1.101) from 00:00:24:cc:5b:00 via eth0
@@ -289,9 +292,15 @@ Having tcpdump running on port 69 (tftp) is also helpful. You should see a lot o
 ```
 apt-get install -y tcpdump
 tcpdump -i eth0 port 69
+20:34:46.536189 IP 10.255.1.105.2070 > 10.255.1.101.tftp:  29 RRQ "auto_install" octet tsize 0
+20:34:46.565168 IP 10.255.1.105.2071 > 10.255.1.101.tftp:  34 RRQ "auto_install" octet blksize 1456
+20:34:46.731693 IP 10.255.1.105.2728 > 10.255.1.101.tftp:  23 RRQ "/etc/boot.conf" octet
+20:34:51.062208 IP 10.255.1.105.2733 > 10.255.1.101.tftp:  25 RRQ "/etc/random.seed" octet
+20:34:51.082028 IP 10.255.1.105.2733 > 10.255.1.101.tftp:  44 RRQ "pxelinux.kernels/openbsd/6.1/bsd.rd" octet
+20:34:51.090949 IP 10.255.1.105.2733 > 10.255.1.101.tftp:  44 RRQ "pxelinux.kernels/openbsd/6.1/bsd.rd" octet
 ```
 
-You should see
+The nginx log is `/var/log/nginx/access.log`. Look for it to pull down the `<macaddress>-install.conf`
 
 </details>
 
