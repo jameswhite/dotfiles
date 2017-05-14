@@ -28,6 +28,9 @@ apt-get install -y nginx rsync
 wget -O /tmp/install61.iso "ftp://mirror.esc7.net/pub/OpenBSD/6.1/i386/install61.iso"
 mount -o loop /tmp/install61.iso /mnt/
 rsync -avzPC /mnt/ /var/www/html/openbsd/install61/
+
+# If you don't create an index.txt the installer throws its hands up.
+(cd /var/www/html/openbsd/install61/6.1/i386; ls -ln > index.txt)
 umount /mnt
 
 ```
@@ -303,4 +306,3 @@ tcpdump -i eth0 port 69
 The nginx log is `/var/log/nginx/access.log`. Look for it to pull down the `<macaddress>-install.conf`
 
 </details>
-
