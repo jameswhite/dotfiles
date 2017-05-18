@@ -331,7 +331,9 @@ This will keep it from going into an infinite re-install loop.
 
 #### Additional Hosts
 <details>
+
 Adding additional hosts:
+
 <summary>Deploying additional hosts:</summary>
 
 Console the device, (it defaults to 19200 8n1, set it to 38400 8n1)
@@ -357,4 +359,26 @@ Once it says Installing bsd, comment out `next-server`, `filename`, and `server-
 
 Repeat as necessary for all soekris boxes.
 
+```
+  host volstagg {
+                  hardware ethernet 0:0:24:cc:e3:84;
+                  fixed-address 10.255.1.107;
+                  next-server 10.255.1.101;
+                  filename "auto_install";
+                  server-name "10.255.1.101";
+                }
+```
+
 </details>
+
+
+On the deployer node
+echo 1> /proc/sys/net/ipv4/ip_forward
+/sbin/iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
+/sbin/iptables -A FORWARD -i wlan0 -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+/sbin/iptables -A FORWARD -i eth0 -o wlan0 -j ACCEPT
+
+On the targets:
+env PKG_PATH="ftp://mirror.esc7.net/pub/OpenBSD/`uname -r`/packages/`uname -m`/" pkg_add "curl"
+env PKG_PATH="ftp://mirror.esc7.net/pub/OpenBSD/`uname -r`/packages/`uname -m`/" pkg_add "salt"
+
