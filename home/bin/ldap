@@ -65,6 +65,7 @@ done
 # dayjob defaults
 [ -z "${DOMAIN}" ] && DOMAIN="github.net"
 
+
 get_value(){
   KEY="$1"
   cat "${HOME}/.ldaprc.${DOMAIN}" | sed -e 's/#.*//' | grep "${KEY}" | sed -e "s/^ *${KEY} *//" -e 's/"//g'
@@ -76,7 +77,12 @@ if [ -f "${HOME}/.ldaprc.${DOMAIN}" ];then
   BINDDN="$( get_value 'BINDDN' )"
   BINDPW="$( get_value 'BINDPW' )"
 else
-  [ -z "$URI" ] && URI="$(dig +short -t srv _ldaps._tcp.${DOMAIN} | sort -n | sed -e 's/\.$//' awk '{print $4\":\"$3}')"
+  # Recover if there is no configuration
+  # [ -z "$URI" ] && URI="$(dig +short -t srv _ldaps._tcp.${DOMAIN} | sort -n | sed -e 's/\.$//' | awk '{print $4\":\"$3}')"
+  [ -z "${URI}" ]    && URI="ldaps://$(hostname -f):636"
+  [ -z "${BASE}" ]   && BASE="dc=$(echo ${DOMAIN} | sed -e 's/\./,dc=/g')"
+  [ -z "${BINDDN}" ] && BINDDN="cn=admin,${BASE}"
+  [ -z "${BINDPW}" ] && BINDPW="$(secret-${DOMAIN})"
 fi
 
 case $(basename $0) in
