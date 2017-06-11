@@ -6,7 +6,7 @@ We need a deploy host, as well as target hosts to which we will be deploying.
 *Deployer:*
 The inital host that deploys OpenBSD.
   - Rasbberry pi 2 (I used a kano kit with kano HDMI monitor)
-  - 64GB Compact flash
+  - 64GB micro SD card
 
 *Targets:*
 We also need target hosts onto which we'll be installing OpenBSD.
