@@ -96,7 +96,7 @@ else
   [ -z "${BINDPW}" ] && BINDPW="$(secret-${DOMAIN})"
 fi
 
-[ ! -z "${BASEDN_OVERRIDE}" ] && BASE="${BASEDN_OVERRIDE}"
+[ ! -z "${BASEDN_OVERRIDE}" ] && BASEDN="${BASEDN_OVERRIDE}"
 [ ! -z "${SCOPE_OVERRIDE}" ] && SCOPE="${SCOPE_OVERRIDE}"
 
 case $(basename $0) in
