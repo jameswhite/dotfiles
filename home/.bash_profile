@@ -4,7 +4,6 @@
 #                                                                              #
 ################################################################################
 
-set -x
 # Remove our gpg-agent-info if the agent is actually dead
 /usr/local/bin/gpg-agent > /dev/null 2>&1
 EXIT=$?
