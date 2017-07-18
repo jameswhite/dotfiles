@@ -59,7 +59,7 @@ while [ ! -z "$*" ]; do
       exit 0
     ;;
     "-v")
-      VERBOSE="'+' '*'"
+      VERBOSE="TRUE"
       shift 1;
     ;;
     *)
@@ -102,9 +102,17 @@ fi
 case $(basename $0) in
   lsearch)
     if [ ! -z "${BINDPW}" ]; then
-        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s "${SCOPE}" -D "${BINDDN}" -w "${BINDPW}" "${ARGS}" ${VERBOSE} | tr "\n" '' | sed -e 's/ //g' | tr '' "\n" | sed -e 's/^#.*//' | grep .
+      if [ "${VERBOSE}" == "TRUE" ]; then
+        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s "${SCOPE}" -D "${BINDDN}" -w "${BINDPW}" "${ARGS}" '+' '*' | tr "\n" '' | sed -e 's/ //g' | tr '' "\n" | sed -e 's/^#.*//' | grep .
+      else
+        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s "${SCOPE}" -D "${BINDDN}" -w "${BINDPW}" "${ARGS}" | tr "\n" '' | sed -e 's/ //g' | tr '' "\n" | sed -e 's/^#.*//' | grep .
+      fi
     else
-        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s "${SCOPE}" -D "${BINDDN}" -W "${ARGS}" ${VERBOSE} | tr "\n" '' | sed -e 's/ //g' | tr '' "\n" | sed -e 's/^#.*//' | grep .
+      if [ "${VERBOSE}" == "TRUE" ]; then
+        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s "${SCOPE}" -D "${BINDDN}" -W "${ARGS}" '+' '*' | tr "\n" '' | sed -e 's/ //g' | tr '' "\n" | sed -e 's/^#.*//' | grep .
+      else
+        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s "${SCOPE}" -D "${BINDDN}" -W "${ARGS}" | tr "\n" '' | sed -e 's/ //g' | tr '' "\n" | sed -e 's/^#.*//' | grep .
+     fi
     fi
   ;;
   ladd)
