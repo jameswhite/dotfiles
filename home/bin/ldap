@@ -30,6 +30,10 @@ case $(basename $0) in
       echo "Usage:   $(basename $0) [ -d <domain> ] <distingushed_name>"
       echo "Example: $(basename $0) -d github.net \"uid=jameswhite,ou=People,dc=github,dc=net\""
   ;;
+  lgroups)
+      echo "Usage:   $(basename $0) [ -d <domain> ] [ -b base ] <search>"
+      echo "Example: $(basename $0) -d github.net -b ou=People,dc=github,dc=net jameswhite"
+  ;;
 esac
 }
 
@@ -151,5 +155,11 @@ case $(basename $0) in
     else
         ldapdelete -xH ${URI} -D "${BINDDN}" -W $*
     fi
+  ;;
+  lgroups)
+    if [ ! -z "${BINDPW}" ]; then
+        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s "${SCOPE}" -D "${BINDDN}" -w "${BINDPW}" "uniqueMember=uid=${ARGS},ou=People,${BASEDN}" | tr "\n" '' | sed -e 's/ //g' | tr '' "\n" | sed -e 's/^#.*//' | grep "^dn: " | sed -e 's/^dn: //' | sed -e 's/,ou=[Gg]roups,dc=github,dc=net//g'
+    fi
+
   ;;
 esac
