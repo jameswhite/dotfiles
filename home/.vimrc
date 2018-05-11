@@ -1,6 +1,7 @@
 call pathogen#infect()
 " Give a shortcut key to NERD Tree
 map <C-n> :NERDTreeToggle<CR>
+map q hi~~A~~
 
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
