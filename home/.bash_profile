@@ -37,6 +37,8 @@ if [ $? -eq 0 ]; then
   (cd ${HOME}/.dotfiles; git pull origin master > /dev/null 2>"${HOME}/tmp/git.err" )
 fi
 
+[ ! -s "${HOME}/tmp/git.err" ] && rm "${HOME}/tmp/git.err"
+
 # Source our encrypted .bash_profile
 # . <(gpg --no-tty -qd ${HOME}/.bash_profile.gpg)
 
