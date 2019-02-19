@@ -5,13 +5,17 @@
 ################################################################################
 
 # Start our gpg-agent and populate gpg-agent-info if it does not exist
-if [[ $(uname) == Darwin ]]; then
-    export GPG_TTY=$(tty)
-    if [[ -n "$SSH_CONNECTION" ]] ;then
-        export PINENTRY_USER_DATA="USE_CURSES=1"
+/bin/ps -ef | /usr/bin/grep -v /usr/bin/grep | /usr/bin/grep -q gpg-agent
+EXIT=$?
+if [ ${EXIT} -ne 0 ]; then
+    if [[ $(uname) == Darwin ]]; then
+        export GPG_TTY=$(tty)
+        if [[ -n "$SSH_CONNECTION" ]] ;then
+            export PINENTRY_USER_DATA="USE_CURSES=1"
+        fi
+        /usr/local/bin/gpg-agent --daemon  2>${HOME}/.gnupg/gpg-agent-err
+        export GPG_TTY=$(tty)
     fi
-    /usr/local/bin/gpg-agent --daemon  2>${HOME}/.gnupg/gpg-agent-err
-    export GPG_TTY=$(tty)
 fi
 
 ping -c1 $(dig +short github.com|head -1) > /dev/null 2>&1
