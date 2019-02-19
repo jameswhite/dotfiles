@@ -6,8 +6,9 @@
 
 # Start our gpg-agent and populate gpg-agent-info if it does not exist
 /bin/ps -ef | /usr/bin/grep -v /usr/bin/grep | /usr/bin/grep -q gpg-agent
-EXIT=$?
+export EXIT=$?
 if [ ${EXIT} -ne 0 ]; then
+    set -x
     if [[ $(uname) == Darwin ]]; then
         export GPG_TTY=$(tty)
         if [[ -n "$SSH_CONNECTION" ]] ;then
@@ -16,6 +17,7 @@ if [ ${EXIT} -ne 0 ]; then
         /usr/local/bin/gpg-agent --daemon  2>${HOME}/.gnupg/gpg-agent-err
         export GPG_TTY=$(tty)
     fi
+    set +x
 fi
 
 ping -c1 $(dig +short github.com|head -1) > /dev/null 2>&1
