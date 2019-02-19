@@ -4,20 +4,13 @@
 #                                                                              #
 ################################################################################
 
-# Remove our gpg-agent-info if the agent is actually dead
-/usr/local/bin/gpg-agent > /dev/null 2>&1
-EXIT=$?
-if [ ${EXIT} -ne 0 ]; then
-    /bin/rm -f ${HOME}/.gnupg/gpg-agent-info
-fi
-
 # Start our gpg-agent and populate gpg-agent-info if it does not exist
 if [[ $(uname) == Darwin ]]; then
     export GPG_TTY=$(tty)
     if [[ -n "$SSH_CONNECTION" ]] ;then
         export PINENTRY_USER_DATA="USE_CURSES=1"
     fi
-    /usr/local/bin/gpg-agent --daemon > ${HOME}/.gnupg/gpg-agent-info > 2>${HOME}/.gnupg/gpg-agent-err
+    /usr/local/bin/gpg-agent --daemon  2>${HOME}/.gnupg/gpg-agent-err
     export GPG_TTY=$(tty)
 fi
 
