@@ -17,7 +17,7 @@ if [[ $(uname) == Darwin ]]; then
     if [[ -n "$SSH_CONNECTION" ]] ;then
         export PINENTRY_USER_DATA="USE_CURSES=1"
     fi
-    /usr/local/bin/gpg-agent --daemon > ${HOME}/.gnupg/gpg-agent-info
+    /usr/local/bin/gpg-agent --daemon > ${HOME}/.gnupg/gpg-agent-info > 2>${HOME}/.gnupg/gpg-agent-err
     export GPG_TTY=$(tty)
 fi
 
