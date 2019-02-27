@@ -34,3 +34,9 @@ fi
 # Known limitation in bash 3.2 http://stackoverflow.com/questions/32596123/why-source-command-doesnt-work-with-process-substitution-in-bash-3-2
 source /dev/stdin <<<"$(cat <(gpg --no-tty -qd ${HOME}/.bash_profile.gpg 2>/dev/null))"
 alias btc='curl -sk https://api.coinbase.com/v2/prices/BTC-USD/buy | jq -rc ".data.amount"'
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/jameswhite/lib/google-cloud-sdk/path.bash.inc' ]; then . '/Users/jameswhite/lib/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/jameswhite/lib/google-cloud-sdk/completion.bash.inc' ]; then . '/Users/jameswhite/lib/google-cloud-sdk/completion.bash.inc'; fi
