@@ -14,7 +14,7 @@ if [ ${EXIT} -ne 0 ]; then
         if [[ -n "$SSH_CONNECTION" ]] ;then
             export PINENTRY_USER_DATA="USE_CURSES=1"
         fi
-        /usr/local/bin/gpg-agent --daemon  2>${HOME}/.gnupg/gpg-agent-err
+        /usr/local/bin/gpg-agent --daemon  2>&1
         export GPG_TTY=$(tty)
     fi
     set +x
@@ -22,11 +22,8 @@ fi
 
 ping -c1 $(dig +short github.com|head -1) > /dev/null 2>&1
 if [ $? -eq 0 ]; then
-  [ -f "${HOME}/tmp/git.err" ] && /bin/rm "${HOME}/tmp/git.err"
-  (cd ${HOME}/.dotfiles; git pull origin master > /dev/null 2>"${HOME}/tmp/git.err" )
+  (cd ${HOME}/.dotfiles; git pull origin master > /dev/null 2>&1)
 fi
-
-[ ! -s "${HOME}/tmp/git.err" ] && rm "${HOME}/tmp/git.err"
 
 # Source our encrypted .bash_profile
 # . <(gpg --no-tty -qd ${HOME}/.bash_profile.gpg)
