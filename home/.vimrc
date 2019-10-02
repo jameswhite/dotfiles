@@ -7,8 +7,8 @@ highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
 syntax on
 set background=dark
-"set foldmarker=%%%FOLD,%%%END\ FOLD%%%
-set foldmarker=</summary>,</details>
+set foldmarker=%%%FOLD,%%%END\ FOLD%%%
+"set foldmarker=</summary>,</details>
 set foldmethod=marker
 " autocmd BufWritePre *.pl :%s/\s\+$//e
 " autocmd BufWritePre *.pp :%s/\s\+$//e
