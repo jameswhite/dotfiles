@@ -5,7 +5,6 @@
 ################################################################################
 
 # Start our gpg-agent and populate gpg-agent-info if it does not exist
-export GPG_TTY=$(tty) export PINENTRY_USER_DATA="USE_CURSES=1"
 /bin/ps -ef | /usr/bin/grep -v /usr/bin/grep | /usr/bin/grep -q gpg-agent
 export EXIT=$?
 if [ ${EXIT} -ne 0 ]; then
