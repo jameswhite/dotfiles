@@ -32,3 +32,4 @@ fi
 
 # Known limitation in bash 3.2 http://stackoverflow.com/questions/32596123/why-source-command-doesnt-work-with-process-substitution-in-bash-3-2
 source /dev/stdin <<<"$(cat <(gpg --no-tty -qd ${HOME}/.bash_profile.gpg 2>/dev/null))"
+export PATH="/usr/local/opt/terraform@0.11/bin:$PATH"
