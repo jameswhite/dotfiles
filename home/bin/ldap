@@ -17,17 +17,17 @@ case $(basename $0) in
       echo "Example: $(basename $0) -d github.net cn=hubot"
   ;;
   ladd)
-      echo "Usage:   $(basename $0) [ -v ] [ -d <domain> ] [ -f <ldif>]"
+      echo "Usage:   $(basename $0) [ -v ] [-d <domain> ] [ -f <ldif>]"
       echo "Example: $(basename $0) -d github.net -f jameswhite.ldif"
       echo "Example: cat jameswhite.ldif | $(basename $0) -d github.net"
   ;;
   lmod)
-      echo "Usage:   $(basename $0) [ -v ] [ -d <domain> ] [ -f <ldif>]"
+      echo "Usage:   $(basename $0) [ -v ] [-d <domain> ] [ -f <ldif>]"
       echo "Example: $(basename $0) -d github.net -f jameswhite.ldif"
       echo "Example: cat jameswhite.ldif | $(basename $0) -d github.net"
   ;;
   ldel)
-      echo "Usage:   $(basename $0) [ -d <domain> ] <distingushed_name>"
+      echo "Usage:   $(basename $0) [-d <domain> ] <distingushed_name>"
       echo "Example: $(basename $0) -d github.net \"uid=jameswhite,ou=People,dc=github,dc=net\""
   ;;
   lgroups)
@@ -37,9 +37,6 @@ case $(basename $0) in
 esac
 }
 
-SCOPE="sub"
-BASEDN_OVERRIDE=""
-
 while [ ! -z "$*" ]; do
   case $1 in
     "-d")
@@ -47,11 +44,7 @@ while [ ! -z "$*" ]; do
       shift 2
     ;;
     "-b")
-      BASEDN_OVERRIDE="$2"
-      shift 2
-    ;;
-    "-s")
-      SCOPE_OVERRIDE="$2"
+      BASEDN="$2"
       shift 2
     ;;
     "-f")
@@ -63,8 +56,8 @@ while [ ! -z "$*" ]; do
       exit 0
     ;;
     "-v")
-      VERBOSE="TRUE"
-      shift 1;
+      VERBOSE='+ *'
+      shift 1
     ;;
     *)
       if [ -z "${ARGS}" ]; then
@@ -80,43 +73,33 @@ done
 # dayjob defaults
 [ -z "${DOMAIN}" ] && DOMAIN="github.net"
 
-
 get_value(){
   KEY="$1"
-  cat "${HOME}/.ldaprc.${DOMAIN}" | sed -e 's/#.*//' | grep "${KEY}" | sed -e "s/^ *${KEY} *//" -e 's/"//g'
+  cat "${HOME}/.ldaprc.${DOMAIN}" | sed -e 's/^#.*//' | grep "${KEY}" | sed -e "s/^ *${KEY} *//" -e 's/"//g'
 }
 
 if [ -f "${HOME}/.ldaprc.${DOMAIN}" ];then
-  URI="$( get_value 'URI' )"
-  BASEDN="$( get_value 'BASE' )"
-  BINDDN="$( get_value 'BINDDN' )"
-  BINDPW="$( get_value 'BINDPW' )"
+  : ${URI:=$( get_value 'URI' )}
+  : ${BASEDN:=$( get_value 'BASE' )}
+  : ${BINDDN:=$( get_value 'BINDDN' )}
+  : ${BINDPW:=$( get_value 'BINDPW' )}
 else
-  # Recover if there is no configuration
-  # [ -z "$URI" ] && URI="$(dig +short -t srv _ldaps._tcp.${DOMAIN} | sort -n | sed -e 's/\.$//' | awk '{print $4\":\"$3}')"
-  [ -z "${URI}" ]    && URI="ldaps://$(hostname -f):636"
-  [ -z "${BASE}" ]   && BASE="dc=$(echo ${DOMAIN} | sed -e 's/\./,dc=/g')"
-  [ -z "${BINDDN}" ] && BINDDN="cn=admin,${BASE}"
-  [ -z "${BINDPW}" ] && BINDPW="$(secret-${DOMAIN})"
+  [ -z "$URI" ] && URI="$(dig +short -t srv _ldaps._tcp.${DOMAIN} | sort -n | sed -e 's/\.$//' | awk '{print "ldaps://"$4":"$3}')"
 fi
 
-[ ! -z "${BASEDN_OVERRIDE}" ] && BASEDN="${BASEDN_OVERRIDE}"
-[ ! -z "${SCOPE_OVERRIDE}" ] && SCOPE="${SCOPE_OVERRIDE}"
+if [ -f "/usr/local/sbin/secret-${DOMAIN}" ]; then
+  : ${URI:="ldap://127.0.0.1:389"}
+  : ${BASEDN:="dc=$(echo ${DOMAIN} | sed -e 's/\./,dc=/')"}
+  : ${BINDDN:="cn=admin,${BASEDN}"}
+  : ${BINDPW:=$(sudo secret-${DOMAIN})}
+fi
 
 case $(basename $0) in
   lsearch)
     if [ ! -z "${BINDPW}" ]; then
-      if [ "${VERBOSE}" == "TRUE" ]; then
-        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s "${SCOPE}" -D "${BINDDN}" -w "${BINDPW}" "${ARGS}" '+' '*' | tr "\n" '' | sed -e 's/ //g' | tr '' "\n" | sed -e 's/^#.*//' | grep .
-      else
-        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s "${SCOPE}" -D "${BINDDN}" -w "${BINDPW}" "${ARGS}" | tr "\n" '' | sed -e 's/ //g' | tr '' "\n" | sed -e 's/^#.*//' | grep .
-      fi
+        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s sub -D "${BINDDN}" -w "${BINDPW}" "${ARGS}" ${VERBOSE} | tr "\n" '' | sed -e 's/ //g' | tr '' "\n" | sed -e 's/^#.*//' | grep .
     else
-      if [ "${VERBOSE}" == "TRUE" ]; then
-        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s "${SCOPE}" -D "${BINDDN}" -W "${ARGS}" '+' '*' | tr "\n" '' | sed -e 's/ //g' | tr '' "\n" | sed -e 's/^#.*//' | grep .
-      else
-        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s "${SCOPE}" -D "${BINDDN}" -W "${ARGS}" | tr "\n" '' | sed -e 's/ //g' | tr '' "\n" | sed -e 's/^#.*//' | grep .
-     fi
+        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s sub -D "${BINDDN}" -W "${ARGS}" ${VERBOSE} | tr "\n" '' | sed -e 's/ //g' | tr '' "\n" | sed -e 's/^#.*//' | grep .
     fi
   ;;
   ladd)
@@ -151,15 +134,14 @@ case $(basename $0) in
   ;;
   ldel)
     if [ ! -z "${BINDPW}" ]; then
-        ldapdelete -xH ${URI} -D "${BINDDN}" -w "${BINDPW}" $*
+        ldapdelete -xH ${URI} -D "${BINDDN}" -w "${BINDPW}" "${ARGS}"
     else
-        ldapdelete -xH ${URI} -D "${BINDDN}" -W $*
+        ldapdelete -xH ${URI} -D "${BINDDN}" -W "${ARGS}"
     fi
   ;;
   lgroups)
     if [ ! -z "${BINDPW}" ]; then
-        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s "${SCOPE}" -D "${BINDDN}" -w "${BINDPW}" "uniqueMember=uid=${ARGS},ou=People,${BASEDN}" | tr "\n" '' | sed -e 's/ //g' | tr '' "\n" | sed -e 's/^#.*//' | grep "^dn: " | sed -e 's/^dn: //' | sed -e 's/,ou=[Gg]roups,dc=github,dc=net//g'
+        ldapsearch -E pr=1000/noprompt -xLLLH $URI -b "${BASEDN}" -s "${SCOPE}" -D "${BINDDN}" -w "${BINDPW}" "uniqueMember=uid=${ARGS},ou=People,${BASEDN}" | tr "\n" '^[' | sed -e 's/^[ //g' | tr '^[' "\n" | sed -e 's/^#.*//' | grep "^dn: " | sed -e 's/^dn: //' | sed -e 's/,ou=[Gg]roups,dc=github,dc=net//g'
     fi
-
   ;;
 esac
