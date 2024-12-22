@@ -16,7 +16,7 @@ if [ ${EXIT} -ne 0 ]; then
         if [[ -n "$SSH_CONNECTION" ]] ;then
             export PINENTRY_USER_DATA="USE_CURSES=1"
         fi
-        /usr/local/bin/gpg-agent --daemon  2>&1
+        /opt/homebrew/bin/gpg-agent --daemon  2>&1
         export GPG_TTY=$(tty)
     fi
     set +x
