@@ -3,7 +3,6 @@
 #          Use the .bash_profile.gpg instead of appending this file.           #
 #                                                                              #
 ################################################################################
-
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # Start our gpg-agent and populate gpg-agent-info if it does not exist
