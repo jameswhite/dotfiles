@@ -20,6 +20,7 @@ if [ ${EXIT} -ne 0 ]; then
     fi
     set +x
 fi
+export GPG_AGENT_INFO=$(gpgconf --list-dirs agent-socket)
 
 ping -c1 $(dig +short github.com|head -1) > /dev/null 2>&1
 if [ $? -eq 0 ]; then
