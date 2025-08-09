@@ -4,7 +4,6 @@
 #                                                                              #
 ################################################################################
 export BASH_SILENCE_DEPRECATION_WARNING=1
-set -x
 
 # Start our gpg-agent and populate gpg-agent-info if it does not exist
 /bin/ps -ef | /usr/bin/grep -v /usr/bin/grep | /usr/bin/grep -q gpg-agent
