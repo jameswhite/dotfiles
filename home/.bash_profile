@@ -36,5 +36,3 @@ export PATH="/usr/local/opt/terraform@0.11/bin:$PATH"
 export PATH="/opt/homebrew/bin:$PATH"
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 if [ "$TERM" == "tmux-256color" ]; then export TERM=screen-256color; fi
-COMPUTERNAME=$(scutil --get ComputerName)
-[ ! -z ${COMPUTERNAME} ] && sudo hostname ${COMPUTERNAME}
