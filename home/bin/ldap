@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 # symlink this to ladd, lmod, lsearch, ldel for fast switching
 
 
