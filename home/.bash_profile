@@ -9,6 +9,7 @@ function parse_git_branch {
   ref=$(git symbolic-ref HEAD 2> /dev/null) || return
   echo "${ref#refs/heads/}"
 }
+export parse_git_branch
 
 function hug_parse_git_branch {
   if [ ! -z "$(parse_git_branch)" ]; then
@@ -17,6 +18,7 @@ function hug_parse_git_branch {
     echo ""
   fi
 }
+export hug_parse_git_branch
 
 ################################################################################
 # Start our gpg-agent and populate gpg-agent-info if it does not exist         #
